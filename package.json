@@ -1,0 +1,25 @@
+{
+  "name": "scratchpad",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.2.1"
+  },
+  "dependencies": {
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "q": "^1.4.1",
+    "lodash": "^4.14.1",
+    "ethereumjs-util": "^4.5.0",
+    "crypto-js": "^3.1.6",
+    "qrcode.react": "^0.6.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/react-scripts/config/eslint.js"
+  }
+}
