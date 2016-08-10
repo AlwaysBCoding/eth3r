@@ -1,0 +1,155 @@
+// Dimensions
+$top-nav-height: 60px;
+$left-nav-width: 90px;
+$content-header-height: 100px;
+
+// Colors
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+input:focus {
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.action-button {
+  cursor: pointer;
+  background-color: rgba(26, 202, 86, 1);
+  padding: 10px;
+}
+
+.App-Header {
+  height: $top-nav-height;
+  background-color: #0c1724;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  h1 {
+    margin-left: 25px;
+    color: white;
+  }
+}
+
+.App-Wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: calc(100vh - #{$top-nav-height});
+}
+
+.App-Nav {
+  width: $left-nav-width;
+  min-height: 100%;
+  background-color: #1F3B5D;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.nav-item {
+  height: 75px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #8191B1;
+  font-family: "Open-Sans";
+  font-size: 14px;
+
+  &.active {
+    background-color: #122337;
+    color: white;
+  }
+
+  &:hover {
+    background-color: #122337;
+    color: white;
+  }
+}
+
+.App-Content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex: 1;
+}
+
+.App-Content.wallet, .App-Content.transaction {
+
+  .Content-Header {
+    background-color: white;
+    height: $content-header-height;
+    padding: 20px;
+    // color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid #d4d8e3;
+  }
+
+  .Content-Content {
+    background-color: #F3F4F7;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-height: calc(100vh - #{$top-nav-height + $content-header-height});
+  }
+
+}
+
+.App-Content.wallet {
+
+  .private-key {
+    width: 50%;
+    margin-top: 25px;
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .address {
+    width: 50%;
+    margin-top: 25px;
+    margin-right: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .private-key h1, .address h1 {
+    margin-bottom: 10px;
+  }
+
+  .private-key p, .address p {
+    margin-bottom: 10px;
+  }
+
+  input.wallet-password {
+    width: 50%;
+    padding: 10px 5px 10px 5px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+  }
+
+}
