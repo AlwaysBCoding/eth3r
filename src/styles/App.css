@@ -11,10 +11,23 @@ h1, h2, h3, h4, h5, h6, p {
   margin-top: 0px;
   margin-bottom: 0px; }
 
+h2, h3 {
+  font-family: "Raleway";
+  font-weight: 600; }
+
 .action-button {
   cursor: pointer;
-  background-color: #1aca56;
+  background-color: #FA3870;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: "Open Sans";
   padding: 10px; }
+
+.flex-spacer {
+  flex: 1; }
 
 .App-Header {
   height: 60px;
@@ -73,42 +86,106 @@ h1, h2, h3, h4, h5, h6, p {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   border-bottom: 1px solid #d4d8e3; }
+  .App-Content.wallet .Content-Header .Content-Header-Nav, .App-Content.transaction .Content-Header .Content-Header-Nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex: 1; }
+    .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item, .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item {
+      font-family: 'Open Sans';
+      font-size: 14px;
+      font-weight: normal;
+      cursor: pointer; }
+      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item.active, .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item.active {
+        padding-bottom: 2.5px;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+        border-bottom-color: #46aeda; }
+      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child), .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child) {
+        margin-left: 15px; }
 .App-Content.wallet .Content-Content, .App-Content.transaction .Content-Content {
   background-color: #F3F4F7;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  min-height: calc(100vh - 160px); }
+  min-height: calc(100vh - 160px);
+  padding: 25px; }
+
+.App-Content .panels-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start; }
+.App-Content .panels-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch; }
+.App-Content .panel {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 #c5cad8, 0 2px 3px #d4d8e3; }
+  .App-Content .panel .panel-header {
+    background-color: rgba(243, 244, 247, 0.5);
+    height: 40px;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid #F3F4F7;
+    font-size: 14px; }
+    .App-Content .panel .panel-header h3 {
+      margin-left: 15px; }
+  .App-Content .panel .panel-content {
+    padding: 25px; }
 
 .App-Content.wallet .private-key {
-  width: 50%;
-  margin-top: 25px;
-  margin-left: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; }
+  width: 40%;
+  margin-top: 25px; }
 .App-Content.wallet .address {
-  width: 50%;
-  margin-top: 25px;
-  margin-right: 25px;
+  width: 40%;
+  margin-top: 25px; }
+.App-Content.wallet .ether-key {
+  font-size: 14px; }
+.App-Content.wallet .private-key .panel-content, .App-Content.wallet .address .panel-content {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center; }
+  .App-Content.wallet .private-key .panel-content canvas, .App-Content.wallet .address .panel-content canvas {
+    margin-top: 25px; }
+.App-Content.wallet .input-sources {
+  height: 80px;
+  background-image: linear-gradient(0deg, #2a5e82 10%, #182848 90%);
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center; }
-.App-Content.wallet .private-key h1, .App-Content.wallet .address h1 {
-  margin-bottom: 10px; }
-.App-Content.wallet .private-key p, .App-Content.wallet .address p {
-  margin-bottom: 10px; }
+.App-Content.wallet .input-sources-actions {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end; }
 .App-Content.wallet input.wallet-password {
+  background-color: transparent;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 2px solid white;
   width: 50%;
   padding: 10px 5px 10px 5px;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center; }
+  font-size: 20px;
+  font-family: "Open Sans";
+  color: white; }
 
 /*# sourceMappingURL=App.css.map */

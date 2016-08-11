@@ -9,6 +9,7 @@ class App extends Component {
     super(props)
     this.state = {
       activeNavIdent: "wallet",
+      activeContentHeaderNavIdent: "from-passphrase",
       walletCreated: false,
       walletPassword: "",
       walletPrivateKey: "",
@@ -52,53 +53,128 @@ class App extends Component {
 
     switch(this.state.activeNavIdent) {
       case "wallet":
-        var ContentHeader, Segment2
+        var ContentHeader, ContentContent, InputSourcesPanel
 
         ConetentHeader =
         <div className="Content-Header">
-          <h1>Create a Wallet</h1>
-          <input
-            className="wallet-password"
-            type="text"
-            value={this.state.walletPassword}
-            onChange={this._walletPasswordChange.bind(this)} />
-          <div
-            className="action-button"
-            onClick={this._generateWallet.bind(this)}>
-            <p>{`Generate Wallet`}</p>
+          <h2>Create a Wallet</h2>
+          <div className="flex-spacer" />
+          <div className="Content-Header-Nav">
+            <div className={(this.state.activeContentHeaderNavIdent == "from-passphrase") ? "content-header-nav-item active" : "content-header-nav-item"}
+                 data-nav-ident="from-passphrase"
+                 onClick={() => this.setState({ activeContentHeaderNavIdent: "from-passphrase" })}>
+              <p>From Passphrase</p>
+            </div>
+            <div className={(this.state.activeContentHeaderNavIdent == "from-passphrase-salt") ? "content-header-nav-item active" : "content-header-nav-item"}
+                  data-nav-ident="from-passphrase-salt"
+                  onClick={() => this.setState({ activeContentHeaderNavIdent: "from-passphrase-salt" })}>
+              <p>From Passphrase + Salt</p>
+            </div>
+            <div className={(this.state.activeContentHeaderNavIdent == "from-private-key") ? "content-header-nav-item active" : "content-header-nav-item"}
+                  data-nav-ident="from-private-key"
+                  onClick={() => this.setState({ activeContentHeaderNavIdent: "from-private-key" })}>
+              <p>From Private Key</p>
+            </div>
+            <div className={(this.state.activeContentHeaderNavIdent == "random") ? "content-header-nav-item active" : "content-header-nav-item"}
+                  data-nav-ident="random"
+                  onClick={() => this.setState({ activeContentHeaderNavIdent: "random" })}>
+              <p>Random</p>
+            </div>
           </div>
         </div>
 
-        if(this.state.walletCreated) {
-          Segment2 =
-          <div className="Content-Content">
-            <div className="private-key">
-              <h1>Private Key</h1>
-              <p>{this.state.walletPrivateKey}</p>
-              <QRCode value={this.state.walletPrivateKey} />
+        switch(this.state.activeContentHeaderNavIdent) {
+          case "from-passphrase":
+            InputSourcesPanel =
+            <div className="panels-column">
+              <div className="panel input-sources">
+                <input
+                  className="wallet-password"
+                  type="text"
+                  placeholder="Passphrase..."
+                  value={this.state.walletPassword}
+                  onChange={this._walletPasswordChange.bind(this)} />
+              </div>
+              <div className="panel input-sources-actions">
+                <div
+                  className="action-button"
+                  onClick={this._generateWallet.bind(this)}>
+                  <p>{`Generate Wallet`}</p>
+                  </div>
+              </div>
             </div>
-            <div className="address">
-              <h1>Wallet Address</h1>
-              <p>{this.state.walletAddress}</p>
-              <QRCode value={this.state.walletAddress} />
+            break;
+          case "from-passphrase-salt":
+            InputSourcesPanel =
+            <div className="panel input-sources">
+              <p>FROM PASSPHRASE SALT</p>
+            </div>
+            break;
+          case "from-private-key":
+            InputSourcesPanel =
+            <div className="panel input-sources">
+            </div>
+            break;
+          case "random":
+            InputSourcesPanel =
+            <div className="panel input-sources">
+            </div>
+            break;
+          default:
+          InputSourcesPanel =
+          <div className="panel input-sources">
+          </div>
+        }
+
+        if(this.state.walletCreated) {
+          ContentContent =
+          <div className="Content-Content">
+            {InputSourcesPanel}
+            <div className="panels-row">
+              <div className="panel private-key">
+                <div className="panel-header">
+                  <h3>Private Key</h3>
+                </div>
+                <div className="panel-content">
+                  <p className="ether-key">{this.state.walletPrivateKey}</p>
+                  <QRCode
+                    value={this.state.walletPrivateKey}
+                    className="wallet-qr-code"
+                    size={150} />
+                </div>
+              </div>
+              <div className="panel address">
+                <div className="panel-header">
+                  <h3>Wallet Address</h3>
+                </div>
+                <div className="panel-content">
+                  <p className="ether-key">{this.state.walletAddress}</p>
+                  <QRCode
+                    value={this.state.walletAddress}
+                    className="wallet-qr-code"
+                    size={150} />
+                </div>
+              </div>
             </div>
           </div>
         } else {
-          Segment2 =
-          <div />
+          ContentContent =
+          <div className="Content-Content">
+            {InputSourcesPanel}
+          </div>
         }
 
         AppContent =
         <div className="App-Content wallet">
           {ConetentHeader}
-          {Segment2}
+          {ContentContent}
         </div>
         break;
       case "transactions":
         var ConetentHeader
         ConetentHeader =
         <div className="Content-Header">
-          <h1>Create a Transaction</h1>
+          <h2>Create a Transaction</h2>
           <input
             className="wallet-password"
             type="text"
