@@ -84,7 +84,7 @@ h2, h3 {
   align-items: stretch;
   flex: 1; }
 
-.App-Content.wallet .Content-Header, .App-Content.transaction .Content-Header {
+.App-Content.wallet .Content-Header, .App-Content.transactions .Content-Header {
   background-color: white;
   height: 100px;
   padding: 20px;
@@ -93,25 +93,25 @@ h2, h3 {
   justify-content: flex-start;
   align-items: flex-start;
   border-bottom: 1px solid #d4d8e3; }
-  .App-Content.wallet .Content-Header .Content-Header-Nav, .App-Content.transaction .Content-Header .Content-Header-Nav {
+  .App-Content.wallet .Content-Header .Content-Header-Nav, .App-Content.transactions .Content-Header .Content-Header-Nav {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
     flex: 1; }
-    .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item, .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item {
+    .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item, .App-Content.transactions .Content-Header .Content-Header-Nav .content-header-nav-item {
       font-family: 'Open Sans';
       font-size: 14px;
       font-weight: normal;
       cursor: pointer; }
-      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item.active, .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item.active {
+      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item.active, .App-Content.transactions .Content-Header .Content-Header-Nav .content-header-nav-item.active {
         padding-bottom: 2.5px;
         border-bottom-style: solid;
         border-bottom-width: 2px;
         border-bottom-color: #46aeda; }
-      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child), .App-Content.transaction .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child) {
+      .App-Content.wallet .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child), .App-Content.transactions .Content-Header .Content-Header-Nav .content-header-nav-item:not(:first-child) {
         margin-left: 15px; }
-.App-Content.wallet .Content-Content, .App-Content.transaction .Content-Content {
+.App-Content.wallet .Content-Content, .App-Content.transactions .Content-Content {
   background-color: #F3F4F7;
   display: flex;
   flex-direction: column;
@@ -207,6 +207,54 @@ h2, h3 {
 .App-Content.wallet :-ms-input-placeholder {
   color: #6e7da4; }
 .App-Content.wallet :-moz-placeholder {
+  color: #6e7da4; }
+
+.App-Content.transactions .input-sources {
+  height: 80px;
+  background-image: linear-gradient(0deg, #2a5e82 10%, #182848 90%);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  color: white; }
+.App-Content.transactions .input-sources-actions {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch; }
+  .App-Content.transactions .input-sources-actions .wallet-gen-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center; }
+    .App-Content.transactions .input-sources-actions .wallet-gen-info p {
+      margin-left: 25px; }
+.App-Content.transactions input {
+  background-color: transparent;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 2px solid white;
+  width: 30%;
+  padding: 10px 5px 10px 5px;
+  font-size: 20px;
+  font-family: "Open Sans";
+  color: white; }
+  .App-Content.transactions input.from-private-key {
+    margin-left: 15px; }
+  .App-Content.transactions input.amount {
+    width: 20%;
+    text-align: center; }
+  .App-Content.transactions input.to-address {
+    margin-right: 15px; }
+.App-Content.transactions ::-webkit-input-placeholder {
+  color: #6e7da4; }
+.App-Content.transactions ::-moz-placeholder {
+  color: #6e7da4; }
+.App-Content.transactions :-ms-input-placeholder {
+  color: #6e7da4; }
+.App-Content.transactions :-moz-placeholder {
   color: #6e7da4; }
 
 /*# sourceMappingURL=App.css.map */

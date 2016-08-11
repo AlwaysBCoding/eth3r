@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import EthereumService from './services/EthereumService'
 import QRCode from 'qrcode.react'
+import Q from 'q'
 import _ from 'lodash'
 import './styles/App.css'
 
@@ -9,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeNavIdent: "wallet",
+      activeNavIdent: "transactions",
       activeContentHeaderNavIdent: "from-passphrase",
       walletCreated: false,
       walletPassword: "",
@@ -17,8 +18,68 @@ class App extends Component {
       walletPrivateKey: "",
       walletAddress: "",
       walletGenPassword: "",
-      walletGenSalt: ""
+      walletGenSalt: "",
+      fromPrivateKey: "",
+      amount: 0,
+      toAddress: ""
     }
+  }
+
+  _sendEther({fromPrivateKey, toAddress, amount}) {
+    var endpoint1 = `https://api.blockcypher.com/v1/eth/main/txs/new?token=2ea49eb351bf445e97a49f5ffd2f7a01`
+    var endpoint2 = `https://api.blockcypher.com/v1/eth/main/txs/send?token=2ea49eb351bf445e97a49f5ffd2f7a01`
+    var deferred = Q.defer()
+    var headers = new Headers()
+    headers.append("Content-Type", "application/json")
+
+    var apiData1 = {
+      "inputs": [
+        {
+          "addresses": [EthereumService.privateKeyToAddress(fromPrivateKey)]
+        }
+      ],
+      "outputs": [
+        {
+          "addresses": [toAddress],
+          "value": amount
+        }
+      ]
+    }
+
+    var fetchConfig1 = {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(apiData1)
+    }
+
+    fetch(endpoint1, fetchConfig1)
+      .then((response) => response.json())
+      .then((data) => {
+        var signature = EthereumService.signMessage({
+          privateKey: fromPrivateKey,
+          messageHash: data.tosign[0]
+        })
+        data.signatures = [signature]
+        console.log(signature)
+        return data
+      })
+      .then((apiData2) => {
+        var fetchConfig2 = {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(apiData2)
+        }
+
+        return fetch(endpoint2, fetchConfig2)
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("CHECKPOINT")
+        console.log(data)
+      })
+      .catch((error) => { deferred.reject(error) })
+
+    return deferred
   }
 
   _walletPasswordChange(event) {
@@ -71,7 +132,13 @@ class App extends Component {
   }
 
   render() {
+    // console.log(EthereumService.signMessage({
+    //   privateKey: "47f87540d75417c3e4f2a4f0600a1c04679a29183aa8d4c37f94e2b4a1b6b0b8",
+    //   messageHash: "d31e9576370cc19a221cc95ee17fea892601ea00188d5a8cee0197b9dde67de1"
+    // }))
+
     var AppHeader, AppWrapper, AppNav, AppContent
+    var ContentHeader, ContentContent, InputSourcesPanel, WalletGenInfo
 
     AppHeader =
     <div className="App-Header">
@@ -90,12 +157,16 @@ class App extends Component {
            onClick={() => this.setState({activeNavIdent: "transactions"})}>
         <p>Transactions</p>
       </div>
+      <div className={(this.state.activeNavIdent === "conversions")? "nav-item active" : "nav-item"}
+           data-nav-ident="conversions"
+           onClick={() => this.setState({activeNavIdent: "conversions"})}>
+        <p>Conversions</p>
+      </div>
     </div>
 
     switch(this.state.activeNavIdent) {
+      // WALLET
       case "wallet":
-        var ContentHeader, ContentContent, InputSourcesPanel, WalletGenInfo
-
         ContentHeader =
         <div className="Content-Header">
           <h2>Create a Wallet</h2>
@@ -279,27 +350,62 @@ class App extends Component {
           {ContentContent}
         </div>
         break;
+
+      // TRANSACTIONS
       case "transactions":
         ContentHeader =
         <div className="Content-Header">
           <h2>Create a Transaction</h2>
-          <input
-            className="wallet-password"
-            type="text"
-            value={this.state.walletPassword}
-            onChange={this._walletPasswordChange.bind(this)} />
-          <div
-            className="action-button"
-            onClick={this._generateWallet.bind(this)}>
-            <p>{`Create Transaction`}</p>
+        </div>
+
+        InputSourcesPanel =
+        <div className="panels-column">
+          <div className="panel input-sources">
+            <input
+              className="from-private-key"
+              type="text"
+              placeholder="From Private Key..."
+              value={this.state.fromPrivateKey}
+              onChange={(event) => this.setState({ fromPrivateKey: event.target.value })} />
+            <div className="flex-spacer" />
+            <input
+              className="amount"
+              type="text"
+              placeholder="Amount..."
+              value={this.state.amount}
+              onChange={(event) => this.setState({ amount: parseInt(event.target.value, 10) })} />
+            <div className="flex-spacer" />
+            <input
+              className="to-address"
+              type="text"
+              placeholder="To Address..."
+              value={this.state.toAddress}
+              onChange={(event) => this.setState({ toAddress: event.target.value })} />
+          </div>
+          <div className="panel input-sources-actions">
+            <div className="flex-spacer" />
+            <div
+              className="action-button"
+              onClick={() => this._sendEther({fromPrivateKey: this.state.fromPrivateKey,
+                                              toAddress: this.state.toAddress,
+                                              amount: this.state.amount})}>
+              <p>{`Generate TX Info`}</p>
+              </div>
           </div>
         </div>
 
+        ContentContent =
+        <div className="Content-Content">
+          {InputSourcesPanel}
+        </div>
+
         AppContent =
-        <div className="App-Content transaction">
+        <div className="App-Content transactions">
           {ContentHeader}
+          {ContentContent}
         </div>
         break;
+
       default:
         AppContent =
         <div />
