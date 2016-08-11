@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import EthereumService from './services/EthereumService'
 import QRCode from 'qrcode.react'
+import _ from 'lodash'
 import './styles/App.css'
 
 class App extends Component {
@@ -12,8 +13,11 @@ class App extends Component {
       activeContentHeaderNavIdent: "from-passphrase",
       walletCreated: false,
       walletPassword: "",
+      walletSalt: "",
       walletPrivateKey: "",
-      walletAddress: ""
+      walletAddress: "",
+      walletGenPassword: "",
+      walletGenSalt: ""
     }
   }
 
@@ -21,11 +25,48 @@ class App extends Component {
     this.setState({ walletPassword: event.target.value })
   }
 
-  _generateWallet() {
+  _generateWallet({salt, privateKey, random}) {
+    var passwordToken
+    if(random) {
+      passwordToken = `Eth3r${Date.now()}`
+    } else if (salt) {
+      passwordToken = this.state.walletPassword + salt
+    } else {
+      passwordToken = this.state.walletPassword
+    }
+
+    if(privateKey) {
+      this.setState({
+        walletCreated: true,
+        walletPassword: "",
+        walletPrivateKey: privateKey,
+        walletAddress: `${EthereumService.privateKeyToAddress(privateKey)}`,
+      })
+    } else {
+      this.setState({
+        walletCreated: true,
+        walletPrivateKey: `${EthereumService.sha256(passwordToken)}`,
+        walletAddress: `${EthereumService.passwordToAddress(passwordToken)}`,
+        walletPassword: "",
+        walletGenPassword: this.state.walletPassword,
+        walletGenSalt: salt
+      })
+    }
+  }
+
+  _clearWallet() {
     this.setState({
-      walletCreated: true,
-      walletPrivateKey: `${EthereumService.sha256(this.state.walletPassword)}`,
-      walletAddress: `${EthereumService.passwordToAddress(this.state.walletPassword)}`
+      walletCreated: false,
+      walletGenPassword: null,
+      walletGenSalt: null,
+      walletPassword: "",
+    })
+  }
+
+  _navigateToContentHeader(navIdent) {
+    this._clearWallet()
+    this.setState({
+      activeContentHeaderNavIdent: navIdent
     })
   }
 
@@ -39,12 +80,12 @@ class App extends Component {
 
     AppNav =
     <div className="App-Nav">
-      <div className={(this.state.activeNavIdent == "wallet")? "nav-item active" : "nav-item"}
+      <div className={(this.state.activeNavIdent === "wallet")? "nav-item active" : "nav-item"}
            data-nav-ident="wallet"
            onClick={() => this.setState({activeNavIdent: "wallet"})}>
         <p>Wallet</p>
       </div>
-      <div className={(this.state.activeNavIdent == "transactions")? "nav-item active" : "nav-item"}
+      <div className={(this.state.activeNavIdent === "transactions")? "nav-item active" : "nav-item"}
            data-nav-ident="transactions"
            onClick={() => this.setState({activeNavIdent: "transactions"})}>
         <p>Transactions</p>
@@ -53,35 +94,56 @@ class App extends Component {
 
     switch(this.state.activeNavIdent) {
       case "wallet":
-        var ContentHeader, ContentContent, InputSourcesPanel
+        var ContentHeader, ContentContent, InputSourcesPanel, WalletGenInfo
 
-        ConetentHeader =
+        ContentHeader =
         <div className="Content-Header">
           <h2>Create a Wallet</h2>
           <div className="flex-spacer" />
           <div className="Content-Header-Nav">
-            <div className={(this.state.activeContentHeaderNavIdent == "from-passphrase") ? "content-header-nav-item active" : "content-header-nav-item"}
+            <div className={(this.state.activeContentHeaderNavIdent === "from-passphrase") ? "content-header-nav-item active" : "content-header-nav-item"}
                  data-nav-ident="from-passphrase"
-                 onClick={() => this.setState({ activeContentHeaderNavIdent: "from-passphrase" })}>
-              <p>From Passphrase</p>
+                 onClick={this._navigateToContentHeader.bind(this, "from-passphrase")}>
+              <p>From Static Passphrase</p>
             </div>
-            <div className={(this.state.activeContentHeaderNavIdent == "from-passphrase-salt") ? "content-header-nav-item active" : "content-header-nav-item"}
+            <div className={(this.state.activeContentHeaderNavIdent === "from-passphrase-salt") ? "content-header-nav-item active" : "content-header-nav-item"}
                   data-nav-ident="from-passphrase-salt"
-                  onClick={() => this.setState({ activeContentHeaderNavIdent: "from-passphrase-salt" })}>
-              <p>From Passphrase + Salt</p>
+                  onClick={this._navigateToContentHeader.bind(this, "from-passphrase-salt")}>
+              <p>From Passphrase with Salt</p>
             </div>
-            <div className={(this.state.activeContentHeaderNavIdent == "from-private-key") ? "content-header-nav-item active" : "content-header-nav-item"}
+            <div className={(this.state.activeContentHeaderNavIdent === "from-private-key") ? "content-header-nav-item active" : "content-header-nav-item"}
                   data-nav-ident="from-private-key"
-                  onClick={() => this.setState({ activeContentHeaderNavIdent: "from-private-key" })}>
+                  onClick={this._navigateToContentHeader.bind(this, "from-private-key")}>
               <p>From Private Key</p>
             </div>
-            <div className={(this.state.activeContentHeaderNavIdent == "random") ? "content-header-nav-item active" : "content-header-nav-item"}
+            <div className={(this.state.activeContentHeaderNavIdent === "random") ? "content-header-nav-item active" : "content-header-nav-item"}
                   data-nav-ident="random"
-                  onClick={() => this.setState({ activeContentHeaderNavIdent: "random" })}>
+                  onClick={this._navigateToContentHeader.bind(this, "random")}>
               <p>Random</p>
             </div>
           </div>
         </div>
+
+        if(this.state.walletCreated) {
+          if(this.state.walletGenPassword && this.state.walletGenSalt) {
+            WalletGenInfo =
+            <div className="wallet-gen-info">
+              <p>{`Passphrase: ${this.state.walletGenPassword}`}</p>
+              <p>{`Salt: ${this.state.walletGenSalt}`}</p>
+            </div>
+          } else if(this.state.walletGenPassword) {
+            WalletGenInfo =
+            <div className="wallet-gen-info">
+              <p>{`Passphrase: ${this.state.walletGenPassword}`}</p>
+            </div>
+          } else {
+            WalletGenInfo =
+            <div />
+          }
+        } else {
+          WalletGenInfo =
+          <div />
+        }
 
         switch(this.state.activeContentHeaderNavIdent) {
           case "from-passphrase":
@@ -96,9 +158,11 @@ class App extends Component {
                   onChange={this._walletPasswordChange.bind(this)} />
               </div>
               <div className="panel input-sources-actions">
+                {WalletGenInfo}
+                <div className="flex-spacer" />
                 <div
                   className="action-button"
-                  onClick={this._generateWallet.bind(this)}>
+                  onClick={this._generateWallet.bind(this, {})}>
                   <p>{`Generate Wallet`}</p>
                   </div>
               </div>
@@ -106,18 +170,63 @@ class App extends Component {
             break;
           case "from-passphrase-salt":
             InputSourcesPanel =
-            <div className="panel input-sources">
-              <p>FROM PASSPHRASE SALT</p>
+            <div className="panels-column">
+              <div className="panel input-sources">
+                <input
+                  className="wallet-password"
+                  type="text"
+                  placeholder="Passphrase..."
+                  value={this.state.walletPassword}
+                  onChange={this._walletPasswordChange.bind(this)} />
+              </div>
+              <div className="panel input-sources-actions">
+                {WalletGenInfo}
+                <div className="flex-spacer" />
+                <div
+                  className="action-button"
+                  onClick={this._generateWallet.bind(this, {salt: String(Date.now())})}>
+                  <p>{`Generate Wallet`}</p>
+                  </div>
+              </div>
             </div>
             break;
           case "from-private-key":
             InputSourcesPanel =
-            <div className="panel input-sources">
+            <div className="panels-column">
+              <div className="panel input-sources">
+                <input
+                  className="wallet-password"
+                  type="text"
+                  placeholder="Private Key..."
+                  value={this.state.walletPassword}
+                  onChange={this._walletPasswordChange.bind(this)} />
+              </div>
+              <div className="panel input-sources-actions">
+                {WalletGenInfo}
+                <div className="flex-spacer" />
+                <div
+                  className="action-button"
+                  onClick={this._generateWallet.bind(this, {privateKey: this.state.walletPassword})}>
+                  <p>{`Generate Wallet`}</p>
+                  </div>
+              </div>
             </div>
             break;
           case "random":
-            InputSourcesPanel =
-            <div className="panel input-sources">
+          InputSourcesPanel =
+            <div className="panels-column">
+              <div className="panel input-sources">
+                <p>COMPLETELY RANDOM</p>
+              </div>
+              <div className="panel input-sources-actions">
+                {WalletGenInfo}
+                <div className="flex-spacer" />
+                <div
+                  className="action-button"
+                  onClick={this._generateWallet.bind(this, {random: true})}>
+                  <p>{`Generate Wallet`}</p>
+                </div>
+              </div>
             </div>
             break;
           default:
@@ -166,13 +275,12 @@ class App extends Component {
 
         AppContent =
         <div className="App-Content wallet">
-          {ConetentHeader}
+          {ContentHeader}
           {ContentContent}
         </div>
         break;
       case "transactions":
-        var ConetentHeader
-        ConetentHeader =
+        ContentHeader =
         <div className="Content-Header">
           <h2>Create a Transaction</h2>
           <input
@@ -189,7 +297,7 @@ class App extends Component {
 
         AppContent =
         <div className="App-Content transaction">
-          {ConetentHeader}
+          {ContentHeader}
         </div>
         break;
       default:

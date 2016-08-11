@@ -11,6 +11,10 @@ h1, h2, h3, h4, h5, h6, p {
   margin-top: 0px;
   margin-bottom: 0px; }
 
+h1 {
+  font-family: "Raleway";
+  font-weight: 600; }
+
 h2, h3 {
   font-family: "Raleway";
   font-weight: 600; }
@@ -170,12 +174,21 @@ h2, h3 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  color: white; }
 .App-Content.wallet .input-sources-actions {
   height: 60px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end; }
+  justify-content: flex-start;
+  align-items: stretch; }
+  .App-Content.wallet .input-sources-actions .wallet-gen-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center; }
+    .App-Content.wallet .input-sources-actions .wallet-gen-info p {
+      margin-left: 25px; }
 .App-Content.wallet input.wallet-password {
   background-color: transparent;
   border-top: 0px;
@@ -187,5 +200,13 @@ h2, h3 {
   font-size: 20px;
   font-family: "Open Sans";
   color: white; }
+.App-Content.wallet ::-webkit-input-placeholder {
+  color: #6e7da4; }
+.App-Content.wallet ::-moz-placeholder {
+  color: #6e7da4; }
+.App-Content.wallet :-ms-input-placeholder {
+  color: #6e7da4; }
+.App-Content.wallet :-moz-placeholder {
+  color: #6e7da4; }
 
 /*# sourceMappingURL=App.css.map */

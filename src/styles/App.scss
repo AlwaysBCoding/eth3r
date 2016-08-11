@@ -24,6 +24,10 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 // Global Styles
+h1 {
+  font-family: "Raleway";
+  font-weight: 600;
+}
 
 h2, h3 {
   font-family: "Raleway";
@@ -251,14 +255,29 @@ h2, h3 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    color: white;
   }
 
   .input-sources-actions {
     height: 60px;
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    .wallet-gen-info {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+
+      p {
+        margin-left: 25px;
+      }
+    }
+
   }
+
 
   input.wallet-password {
     background-color: rgba(0,0,0,0);
@@ -272,5 +291,10 @@ h2, h3 {
     font-family: "Open Sans";
     color: white;
   }
+
+  ::-webkit-input-placeholder { color: rgb(110, 125, 164); }
+  ::-moz-placeholder { color: rgb(110, 125, 164); }
+  :-ms-input-placeholder { color: rgb(110, 125, 164); }
+  :-moz-placeholder { color: rgb(110, 125, 164); }
 
 }
