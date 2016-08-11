@@ -28,7 +28,7 @@ class EthereumService {
 
   signMessage({privateKey, messageHash}) {
     var signedMessage = ethutil.ecsign(new Buffer(messageHash, 'hex'), new Buffer(privateKey, 'hex'))
-    return ethutil.toRpcSig(signedMessage.v, signedMessage.r, signedMessage.s)
+    return ethutil.toRpcSig(signedMessage.v, signedMessage.r, signedMessage.s).toString('hex').substring(2, 10000)
   }
 
 }

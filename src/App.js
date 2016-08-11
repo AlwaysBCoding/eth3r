@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import EthereumService from './services/EthereumService'
 import QRCode from 'qrcode.react'
 import Q from 'q'
-import _ from 'lodash'
+// import _ from 'lodash'
 import './styles/App.css'
 
 class App extends Component {
@@ -59,8 +59,10 @@ class App extends Component {
           privateKey: fromPrivateKey,
           messageHash: data.tosign[0]
         })
+        // console.log(data.tosign[0])
+        // console.log(signature)
         data.signatures = [signature]
-        console.log(signature)
+        // console.log(data)
         return data
       })
       .then((apiData2) => {
@@ -74,8 +76,8 @@ class App extends Component {
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log("CHECKPOINT")
-        console.log(data)
+        // console.log("CHECKPOINT")
+        // console.log(data)
       })
       .catch((error) => { deferred.reject(error) })
 
@@ -132,10 +134,10 @@ class App extends Component {
   }
 
   render() {
-    // console.log(EthereumService.signMessage({
-    //   privateKey: "47f87540d75417c3e4f2a4f0600a1c04679a29183aa8d4c37f94e2b4a1b6b0b8",
-    //   messageHash: "d31e9576370cc19a221cc95ee17fea892601ea00188d5a8cee0197b9dde67de1"
-    // }))
+    EthereumService.signMessage({
+      privateKey: "47f87540d75417c3e4f2a4f0600a1c04679a29183aa8d4c37f94e2b4a1b6b0b8",
+      messageHash: "d31e9576370cc19a221cc95ee17fea892601ea00188d5a8cee0197b9dde67de1"
+    })
 
     var AppHeader, AppWrapper, AppNav, AppContent
     var ContentHeader, ContentContent, InputSourcesPanel, WalletGenInfo
