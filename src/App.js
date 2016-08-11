@@ -10,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeNavIdent: "transactions",
+      activeNavIdent: "wallet",
       activeContentHeaderNavIdent: "from-passphrase",
       walletCreated: false,
       walletPassword: "",
@@ -391,7 +391,7 @@ class App extends Component {
               onClick={() => this._sendEther({fromPrivateKey: this.state.fromPrivateKey,
                                               toAddress: this.state.toAddress,
                                               amount: this.state.amount})}>
-              <p>{`Generate TX Info`}</p>
+              <p>{`Send Ether`}</p>
               </div>
           </div>
         </div>
